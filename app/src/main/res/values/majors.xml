@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="majors">
+        <item>计算机科学与技术</item>
+        <item>国防学院</item>
+        <item>文学与艺术</item>
+    </string-array>
+</resources>

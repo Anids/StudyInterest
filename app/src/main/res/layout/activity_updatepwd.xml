@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/colorLightSlateBlue">
+        <ImageButton
+            android:id="@+id/left_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/bg_arrowleft"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription,RtlHardcoded" />
+        <TextView
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改密码"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/tv_old"
+            android:layout_centerVertical="true"
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="旧密码:"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+        <EditText
+            android:id="@+id/et_oldpass"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/tv_old"
+            android:background="@null"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="14dp"
+            tools:ignore="HardcodedText,LabelFor,RtlHardcoded,SpUsage,TextFields" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/darker_gray"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp">
+        <TextView
+            android:id="@+id/tv_new"
+            android:layout_centerVertical="true"
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新密码:"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+        <EditText
+            android:id="@+id/et_newpass1"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/tv_new"
+            android:background="@null"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="14dp"
+            tools:ignore="HardcodedText,LabelFor,RtlHardcoded,SpUsage,TextFields" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/darker_gray"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp">
+        <TextView
+            android:id="@+id/tv_renew"
+            android:layout_centerVertical="true"
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确认密码:"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
+        <EditText
+            android:id="@+id/et_newpass2"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/tv_renew"
+            android:background="@null"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="14dp"
+            tools:ignore="HardcodedText,LabelFor,RtlHardcoded,SpUsage,TextFields" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/darker_gray"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_sure"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/btn_blue_selector"
+        android:text="确认"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:textSize="18dp"
+        tools:ignore="HardcodedText,SpUsage" />
+</LinearLayout>

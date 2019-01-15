@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="grades">
+        <item>大一上</item>
+        <item>大一下</item>
+        <item>大二上</item>
+        <item>大二下</item>
+        <item>大三上</item>
+        <item>大三下</item>
+    </string-array>
+</resources>

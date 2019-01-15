@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">StudyInteret</string>
+    <string name="updatepassword">修改密码</string>
+    <string name="newpassword">新密码:</string>
+    <string name="lastpassword">旧密码:</string>
+    <string name="truenewpasswor">确认新密码:</string>
+    <string name="btn_true">确认</string>
+    <string name="myfile">我的资料</string>
+    <string name="inset">设置</string>
+    <string name="pic_head">头像</string>
+</resources>
