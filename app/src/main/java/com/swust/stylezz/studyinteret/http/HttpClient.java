@@ -17,7 +17,7 @@ import java.net.URLDecoder;
 public class HttpClient {
     private static JSONObject myJson=null;
     public static JSONObject sendRequestWithHttpClient(final String requestMethod, final String serverUrl,final JSONObject obj,final String userToken ) throws InterruptedException {
-        final String token="'"+userToken+"'";
+        final String token=userToken;
         Thread  thread = null;
         if(requestMethod=="GET")
         {

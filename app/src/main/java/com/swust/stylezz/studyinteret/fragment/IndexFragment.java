@@ -1,6 +1,7 @@
 package com.swust.stylezz.studyinteret.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,16 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.swust.stylezz.studyinteret.R;
+import com.swust.stylezz.studyinteret.http.HttpClient;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class IndexFragment extends Fragment {
     //实例化对象,单例模式
@@ -34,12 +45,69 @@ public class IndexFragment extends Fragment {
     private SimpleAdapter simpleAdapter;//列表
     private View rootView;
     private SharedPreferences sharedPreferences;
+    private String IndexToken;
+    private JSONObject serverData=null;
+    private String status;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate ( R.layout.fragment_index, container, false );
-        Toast.makeText ( getActivity ().getApplicationContext (),"首页",Toast.LENGTH_LONG ).show ();
+        //Toast.makeText ( getActivity ().getApplicationContext (),"首页",Toast.LENGTH_LONG ).show ();
+        /**
+         * 1.显示出收藏列表；
+         * 2.请求后端数据，并以列表的形式展出；
+         * */
+        InitView();
         return rootView;
+    }
+
+    private void InitView() {
+        getToken();
+        if(status.equals ( "1" )){
+
+        }else{
+            Toast.makeText ( getActivity ().getApplicationContext (),"您尚未登录，请登录！",Toast.LENGTH_LONG ).show ();
+            return;
+        }
+        if (IndexToken.isEmpty ()){
+            Toast.makeText ( getActivity ().getApplicationContext (),"登录出错，请重新登录！",Toast.LENGTH_LONG ).show ();
+            return;
+        }
+        RequireToClientWithData();
+    }
+
+    private void RequireToClientWithData() {
+        String UrlStr="http://interestion.xyz:3000/app/getcollect";
+        try {
+            serverData = HttpClient.sendRequestWithHttpClient ( "GET",UrlStr,null,IndexToken );
+        } catch (InterruptedException e) {
+            e.printStackTrace ();
+        }
+        List<Map<String, Object>> datanews=null;
+        try {
+            JSONArray data=(JSONArray)serverData.get("data");
+            listView = rootView.findViewById(R.id.lv_01);
+            datanews = new ArrayList<Map<String, Object>> ();
+            for (int i=0;i<data.length();i++)
+            {
+                JSONObject oj = data.getJSONObject(i);
+                Map<String, Object> item1 = new HashMap<String, Object> ();
+                item1.put("image", R.mipmap.ic_pdf);
+                item1.put("name", (String)oj.get("filename"));
+                datanews.add(item1);
+            }
+            simpleAdapter = new SimpleAdapter(getActivity ().getApplicationContext(), datanews,
+                    R.layout.listview_item, new String[] { "image", "name" },
+                    new int[] { R.id.icon_pdf, R.id.text_itemName });
+            listView.setAdapter(simpleAdapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private void getToken() {
+        sharedPreferences=getActivity ().getSharedPreferences ( "logindata", Context.MODE_PRIVATE );
+        status=sharedPreferences.getString ( "update_state","" );
+        IndexToken=sharedPreferences.getString ( "token","" );
     }
 }

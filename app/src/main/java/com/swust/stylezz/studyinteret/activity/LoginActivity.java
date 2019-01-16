@@ -1,5 +1,6 @@
 package com.swust.stylezz.studyinteret.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    //private static InSetFragment inSetFragment;
     private JSONObject Login_ObjData=null;
     private EditText GetUserNameStr;
     private EditText GetPassWordStr;
@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ImageView PassWordStatus;
     private HttpClient ServerSquire;
     private String loginToken;
+    private String NickName;
     private String UsernameHash=null;
     private String PasswordHash=null;
     private int state = 1;
@@ -56,10 +57,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void InitView() {
+        //初始化logindata文件中的update_state值
+        ChangeStatus();
+        //
         LocalDataLogin();
         UpdateLoginStatus();
         SetFindViewByID();
         SetOnClickListener();
+    }
+
+    private void ChangeStatus() {
+        sharedPreferencesLogin=getSharedPreferences ( "logindata",MODE_PRIVATE );
+        SharedPreferences.Editor editor=sharedPreferencesLogin.edit ();
+        editor.putString ( "update_state","0" );
+        editor.commit ();
     }
 
     private void LocalDataLogin() {
@@ -125,12 +136,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btn_login:
                 //比较数据判断是否登录成功；
+                UpdateLoginStatus();
                 setLogin();
                 break;
             case R.id.regist_account:
                 //跳转到注册界面；
+                JumpToRegistInterface();
                 break;
         }
+    }
+
+    private void JumpToRegistInterface() {
+        startActivity ( new Intent ( this,RegistActivity.class  ) );
     }
 
     private void setLogin() {
@@ -154,7 +171,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         SharedPreferences.Editor editor=sharedPreferencesLogin.edit ();
         editor.putString ( "update_state","1" );
         editor.commit ();
-        //inSetFragment.SetData ( UsernameHash );
         LoginActivity.this.finish ();
     }
 
@@ -170,6 +186,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editor.putString ( "username",UsernameHash );
         editor.putString ( "password",PasswordHash );
         editor.putString ( "token",loginToken );
+        editor.putString ( "nickname",NickName );
         editor.commit ();
     }
 
@@ -215,19 +232,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } catch (JSONException e) {
             e.printStackTrace ();
         }
-        try {
-            Login_ObjData=ServerSquire.sendRequestWithHttpClient("POST","http://interestion.xyz:3000/app/login",obj,null);
-        } catch (InterruptedException e) {
-            e.printStackTrace ();
-        }
         JSONArray objdata;
         String status=null;
         String token=null;
+        String nick_name=null;
         try {
+            //请求登录验证；
+            Login_ObjData=ServerSquire.sendRequestWithHttpClient("POST","http://interestion.xyz:3000/app/login",obj,null);
             status=(String) Login_ObjData.get ( "status" );
             objdata=(JSONArray)Login_ObjData.get ( "data" );
             obj=objdata.getJSONObject ( 0 );
             token=(String)obj.get ( "token" );
+            nick_name=(String)obj.get("nickname");
+        } catch (InterruptedException e) {
+            e.printStackTrace ();
         } catch (JSONException e) {
             e.printStackTrace ();
         }
@@ -244,6 +262,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             state=0;
             return;
         }
+        if(nick_name.isEmpty ()){
+            Toast.makeText ( LoginActivity.this,"登录失败，请重新输入！",Toast.LENGTH_SHORT ).show ();
+            state=0;
+            return;
+        }
+        NickName=nick_name;
         loginToken=token;
         obj=null;
         objdata=null;

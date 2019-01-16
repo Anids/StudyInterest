@@ -51,7 +51,7 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate ( R.layout.fragment_inset, container, false );
-        Toast.makeText ( getActivity ().getApplicationContext (),"设置",Toast.LENGTH_LONG ).show ();
+        //Toast.makeText ( getActivity ().getApplicationContext (),"设置",Toast.LENGTH_LONG ).show ();
         /**
          * 1.头像框登录；
          * 2.登录后更新信息；
@@ -125,12 +125,13 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
         String token = sharedPreferencesLogin.getString ( "token","" );
         String username=sharedPreferencesLogin.getString ( "username","" );
         String password=sharedPreferencesLogin.getString ( "password","" );
+        String nickname=sharedPreferencesLogin.getString ( "nickname","" );
         String status=sharedPreferencesLogin.getString ( "update_state","" );
         getInsetToken(token);
         getInsetUserName(username);
         getInsetPassWord(password);
         if (status.equals ( "1" )){
-            SetData ( username );
+            SetData ( nickname,username );
         }
     }
 
@@ -147,8 +148,8 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public void SetData(String username) {
-        lbelName.setText ( username );
+    public void SetData(String nickname,String username) {
+        lbelName.setText ( nickname );
         lbelUserName.setText ( username );
         lbelStatus.setText ( "已登录" );
     }
