@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.activity.LoginActivity;

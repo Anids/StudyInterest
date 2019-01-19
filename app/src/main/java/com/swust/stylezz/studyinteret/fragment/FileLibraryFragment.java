@@ -2,12 +2,15 @@ package com.swust.stylezz.studyinteret.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -15,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.swust.stylezz.studyinteret.R;
+import com.swust.stylezz.studyinteret.activity.PdfviewActivity;
 import com.swust.stylezz.studyinteret.http.HttpClient;
 
 import org.json.JSONArray;
@@ -28,7 +32,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileLibraryFragment extends Fragment implements View.OnClickListener {
+import static android.widget.Toast.LENGTH_LONG;
+
+public class FileLibraryFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
     private Spinner spinnerGrade;
     private Spinner spinnerProfessional;
     private Spinner spinnerCourses;
@@ -42,6 +48,7 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
     private String coursesData;
     private String FileLibraryToken;
     private JSONObject ServerData=null;
+    public static String pdf_Url;
     //单例模式，实例化对象
     private static volatile FileLibraryFragment fileLibraryFragmentInstance = null;
     @SuppressLint("ValidFragment")
@@ -139,6 +146,7 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
                     new int[] { R.id.icon_pdf_database, R.id.listviewtext_database });
             //步骤3：将List中的内容填充到listView里面去
             listView.setAdapter(simpleAdapter);
+            listView.setOnItemClickListener ( this );
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -146,5 +154,20 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
     private void getToken() {
         sharedPreferences=getActivity ().getSharedPreferences ( "logindata", Context.MODE_PRIVATE );
         FileLibraryToken=sharedPreferences.getString ( "token","" );
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String UrlPDF="http://interestion.xyz:3000";
+        try {
+            JSONArray data=(JSONArray)ServerData.get ( "data" );
+            JSONObject oj=data.getJSONObject ( position );
+            UrlPDF=UrlPDF+oj.get ( "fileurl" );
+        } catch (JSONException e) {
+            e.printStackTrace ();
+        }
+        this.pdf_Url=UrlPDF;
+        Toast.makeText ( getActivity ().getApplicationContext (),UrlPDF,Toast.LENGTH_LONG ).show ();
+        startActivity ( new Intent ( getActivity ().getApplicationContext (), PdfviewActivity.class ) );
     }
 }

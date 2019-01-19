@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IndexFragment extends Fragment {
+public class IndexFragment extends Fragment implements AdapterView.OnItemClickListener {
     //实例化对象,单例模式
     private static volatile IndexFragment indexFragmentInstance = null;
     @SuppressLint("ValidFragment")
@@ -81,6 +82,7 @@ public class IndexFragment extends Fragment {
         String UrlStr="http://interestion.xyz:3000/app/getcollect";
         try {
             serverData = HttpClient.sendRequestWithHttpClient ( "GET",UrlStr,null,IndexToken );
+            //Toast.makeText ( getActivity ().getApplicationContext (),"登录出错，请重新登录！",Toast.LENGTH_LONG ).show ();
         } catch (InterruptedException e) {
             e.printStackTrace ();
         }
@@ -101,6 +103,7 @@ public class IndexFragment extends Fragment {
                     R.layout.listview_item, new String[] { "image", "name" },
                     new int[] { R.id.icon_pdf, R.id.text_itemName });
             listView.setAdapter(simpleAdapter);
+            listView.setOnItemClickListener ( this );
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -109,5 +112,10 @@ public class IndexFragment extends Fragment {
         sharedPreferences=getActivity ().getSharedPreferences ( "logindata", Context.MODE_PRIVATE );
         status=sharedPreferences.getString ( "update_state","" );
         IndexToken=sharedPreferences.getString ( "token","" );
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }
