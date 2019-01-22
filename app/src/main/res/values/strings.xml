@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StudyInteret</string>
+    <string name="app_name">趣学习</string>
     <string name="updatepassword">修改密码</string>
     <string name="newpassword">新密码:</string>
     <string name="lastpassword">旧密码:</string>

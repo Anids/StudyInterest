@@ -147,16 +147,13 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorGrey"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorGrey"
-            android:layout_marginTop="10dp"/>
+
         <LinearLayout
             android:id="@+id/changePassWord"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:orientation="horizontal"
+            android:layout_marginTop="@dimen/space_10"
             android:background="@color/colorWhite">
             <ImageView
                 android:layout_width="24dp"
@@ -168,6 +165,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="修改密码"
+                android:textSize="18sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey"/>
+
+        <LinearLayout
+            android:id="@+id/clearpdf"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/space_12"
+            android:orientation="horizontal"
+            android:background="@color/colorWhite">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/bg_cleardata"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清除缓存"
                 android:textSize="18sp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dp"/>

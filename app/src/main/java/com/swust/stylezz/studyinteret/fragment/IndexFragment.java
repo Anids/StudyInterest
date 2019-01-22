@@ -2,6 +2,7 @@ package com.swust.stylezz.studyinteret.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterViewAnimator;
+import android.widget.AdapterViewFlipper;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.swust.stylezz.studyinteret.R;
+import com.swust.stylezz.studyinteret.activity.PdfviewActivity;
 import com.swust.stylezz.studyinteret.http.HttpClient;
 
 import org.json.JSONArray;
@@ -25,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IndexFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class IndexFragment extends Fragment implements AdapterView.OnItemClickListener{
     //实例化对象,单例模式
     private static volatile IndexFragment indexFragmentInstance = null;
     @SuppressLint("ValidFragment")
@@ -47,8 +52,10 @@ public class IndexFragment extends Fragment implements AdapterView.OnItemClickLi
     private View rootView;
     private SharedPreferences sharedPreferences;
     private String IndexToken;
+    public static String Index_token;
     private JSONObject serverData=null;
     private String status;
+    public static String Url_index;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,6 +84,8 @@ public class IndexFragment extends Fragment implements AdapterView.OnItemClickLi
         }
         RequireToClientWithData();
     }
+
+
 
     private void RequireToClientWithData() {
         String UrlStr="http://interestion.xyz:3000/app/getcollect";
@@ -112,10 +121,23 @@ public class IndexFragment extends Fragment implements AdapterView.OnItemClickLi
         sharedPreferences=getActivity ().getSharedPreferences ( "logindata", Context.MODE_PRIVATE );
         status=sharedPreferences.getString ( "update_state","" );
         IndexToken=sharedPreferences.getString ( "token","" );
+        Index_token=IndexToken;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        String UrlPDF="http://interestion.xyz:3000";
+        try {
+            JSONArray data=(JSONArray)serverData.get ( "data" );
+            JSONObject oj=data.getJSONObject ( position );
+            UrlPDF=UrlPDF+oj.get ( "fileurl" );
+        } catch (JSONException e) {
+            e.printStackTrace ();
+        }
+        this.Url_index=UrlPDF;
+        PdfviewActivity.ans=1;
+        //Toast.makeText ( getActivity ().getApplicationContext (),UrlPDF,Toast.LENGTH_LONG ).show ();
+        startActivity ( new Intent ( getActivity ().getApplicationContext (), PdfviewActivity.class ) );
     }
+
 }

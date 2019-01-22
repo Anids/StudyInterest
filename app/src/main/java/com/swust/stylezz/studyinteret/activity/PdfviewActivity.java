@@ -7,17 +7,18 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.fragment.FileLibraryFragment;
+import com.swust.stylezz.studyinteret.fragment.IndexFragment;
+import com.swust.stylezz.studyinteret.fragment.RecentlyBrowseFragment;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 
@@ -25,9 +26,9 @@ import okhttp3.Call;
 public class PdfviewActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageButton btn_returnToIndex;
     private TextView textView_returnToIndex;
-    private ProgressBar pb_bar;
     private PDFView pdfView;
-    private String UrlPDF;
+    private String UrlPDF=null;
+    public static int ans;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
@@ -40,14 +41,22 @@ public class PdfviewActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void InitView() {
-        deletefile("mas.pdf");
+        if(ans==1){
+            UrlPDF=IndexFragment.Url_index;
+        }
+        if(ans==2){
+            UrlPDF=FileLibraryFragment.pdf_Url;
+        }
+        if(ans==3){
+            UrlPDF=RecentlyBrowseFragment.Url_RBF;
+        }
+        if(UrlPDF.isEmpty ()){
+            return;
+        }
         btn_returnToIndex=findViewById ( R.id.btn_return_pdf );
         textView_returnToIndex=findViewById ( R.id.textview_pdf_tt );
         pdfView=(PDFView)findViewById ( R.id.pdfview ) ;
-        pb_bar=findViewById ( R.id.pb_bar );
-        UrlPDF=FileLibraryFragment.pdf_Url;
         downloadOkHttpFile();
-        pdfView.fromFile ( new File ( Environment.getExternalStorageDirectory ().getAbsolutePath ()+"/mas.pdf" ) ).load ();
         btn_returnToIndex.setOnClickListener ( this );
         textView_returnToIndex.setOnClickListener ( this );
     }
@@ -66,34 +75,46 @@ public class PdfviewActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
     public void downloadOkHttpFile(){
-        OkHttpUtils
-                .get ()
-                .url ( UrlPDF )
-                .build ()
-                .execute ( new FileCallBack (Environment.getExternalStorageDirectory ().getAbsolutePath (),"mas.pdf") {
-                    @Override
-                    public void inProgress(float v, long l) {
+        String destfilename = UrlPDF.replace ( "http://interestion.xyz:3000/","" );
+        String a="/";
+        final String destfilename2=a.concat ( destfilename );
+        File file = new File ( Environment.getExternalStorageDirectory ().getAbsolutePath ()+destfilename2 );
+        if (file.exists ())
+        {
+            pdfView.fromFile ( file).load ();
+        }
+        else{
+            new Thread (  ){
+                @Override
+                public void run() {
+                    super.run ();
+                    String destfilename = UrlPDF.replace ( "http://interestion.xyz:3000/","" );
+                    OkHttpUtils
+                            .get ()
+                            .url ( UrlPDF )
+                            .build ()
+                            .execute ( new FileCallBack (Environment.getExternalStorageDirectory ().getAbsolutePath (),destfilename) {
+                                @Override
+                                public void inProgress(float v, long l) {
 
-                    }
+                                }
 
-                    @Override
-                    public void onError(Call call, Exception e) {
+                                @Override
+                                public void onError(Call call, Exception e) {
 
-                    }
+                                }
 
-                    @Override
-                    public void onResponse(File file) {
+                                @Override
+                                public void onResponse(File file) {
+                                    pdfView.fromFile (
+                                            new File ( Environment.getExternalStorageDirectory ().getAbsolutePath ()+destfilename2 ) )
+                                            .load ();
+                                }
+                            } );
+                }
 
-                    }
-                } );
-    }
-    public static void deletefile(String fileName) {
-        try {
-            // 找到文件所在的路径并删除该文件
-            File file = new File(Environment.getExternalStorageDirectory(), fileName);
-            file.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
+            }.start ();
+
         }
     }
 }

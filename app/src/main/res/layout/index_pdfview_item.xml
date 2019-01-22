@@ -36,13 +36,8 @@
 
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfview"
-        android:layout_below="@+id/pb_bar"
+        android:layout_below="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </com.github.barteksc.pdfviewer.PDFView>
-    <ProgressBar
-        android:id="@+id/pb_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
 </RelativeLayout>

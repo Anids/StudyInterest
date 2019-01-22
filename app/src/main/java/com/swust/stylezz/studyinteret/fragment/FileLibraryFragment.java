@@ -167,7 +167,7 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
             e.printStackTrace ();
         }
         this.pdf_Url=UrlPDF;
-        Toast.makeText ( getActivity ().getApplicationContext (),UrlPDF,Toast.LENGTH_LONG ).show ();
+        PdfviewActivity.ans=2;
         startActivity ( new Intent ( getActivity ().getApplicationContext (), PdfviewActivity.class ) );
     }
 }

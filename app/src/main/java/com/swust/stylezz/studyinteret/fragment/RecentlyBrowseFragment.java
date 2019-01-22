@@ -2,17 +2,20 @@ package com.swust.stylezz.studyinteret.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.swust.stylezz.studyinteret.R;
+import com.swust.stylezz.studyinteret.activity.PdfviewActivity;
 import com.swust.stylezz.studyinteret.http.HttpClient;
 
 import org.json.JSONArray;
@@ -24,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecentlyBrowseFragment extends Fragment {
+public class RecentlyBrowseFragment extends Fragment implements AdapterView.OnItemClickListener {
     private SharedPreferences sharedPreferences;
     private String RecentToken;
     private JSONObject RBFObj;
@@ -33,6 +36,7 @@ public class RecentlyBrowseFragment extends Fragment {
     private static volatile RecentlyBrowseFragment recentlyBrowseFragmentInstance = null;
     private String status;
     private View rootView;
+    public static String Url_RBF;
 
     @SuppressLint("ValidFragment")
     private RecentlyBrowseFragment(){}
@@ -100,6 +104,7 @@ public class RecentlyBrowseFragment extends Fragment {
                     R.layout.listview_item_recent, new String[] { "image", "name","date" },
                     new int[] { R.id.icon_pdf_recent, R.id.listviewtext_recent ,R.id.listview_date});
             listView.setAdapter(simpleAdapter);
+            listView.setOnItemClickListener ( this );
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -109,5 +114,21 @@ public class RecentlyBrowseFragment extends Fragment {
         sharedPreferences=getActivity ().getSharedPreferences ( "logindata", Context.MODE_PRIVATE );
         RecentToken=sharedPreferences.getString ( "token","" );
         status=sharedPreferences.getString ( "update_state","" );
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String UrlPDF="http://interestion.xyz:3000";
+        try {
+            JSONArray data=(JSONArray)RBFObj.get ( "data" );
+            JSONObject oj=data.getJSONObject ( position );
+            UrlPDF=UrlPDF+oj.get ( "fileurl" );
+        } catch (JSONException e) {
+            e.printStackTrace ();
+        }
+        this.Url_RBF=UrlPDF;
+        PdfviewActivity.ans=3;
+        //Toast.makeText ( getActivity ().getApplicationContext (),UrlPDF,Toast.LENGTH_LONG ).show ();
+        startActivity ( new Intent ( getActivity ().getApplicationContext (), PdfviewActivity.class ) );
     }
 }

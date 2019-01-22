@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +15,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.activity.LoginActivity;
 import com.swust.stylezz.studyinteret.activity.UpdatePwdActivity;
+
+import java.io.File;
 
 public class InSetFragment extends Fragment implements View.OnClickListener {
     private View rootView;
@@ -45,6 +50,7 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
 
     private ImageButton imageButtonHead;
     private LinearLayout linearLayoutUpdatePwd;
+    private LinearLayout btn_clearpdf;
     private Button buttonCancellationLogin;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,12 +76,14 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
     private void SetOnClickListener() {
         imageButtonHead.setOnClickListener ( this );
         linearLayoutUpdatePwd.setOnClickListener ( this );
+        btn_clearpdf.setOnClickListener ( this );
         buttonCancellationLogin.setOnClickListener ( this );
     }
 
     private void SetFindViewByID() {
         imageButtonHead=rootView.findViewById ( R.id.myPhoto );
         linearLayoutUpdatePwd=rootView.findViewById ( R.id.changePassWord );
+        btn_clearpdf=rootView.findViewById ( R.id.clearpdf );
         buttonCancellationLogin=rootView.findViewById ( R.id.button_Logout_login );
         lbelName = rootView.findViewById ( R.id.truthname );
         lbelUserName = rootView.findViewById ( R.id.inset_username ) ;
@@ -89,6 +97,7 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
             case R.id.myPhoto:
                 //实现登录界面的跳转或历史登录；
                 JumpToLoginInterface();
+                Toast.makeText ( getActivity ().getApplicationContext (),"登录成功",Toast.LENGTH_SHORT ).show ();
                 break;
             case R.id.changePassWord:
                 //实现修改密码界面的跳转；
@@ -98,6 +107,52 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
                 //实现注销登录;
                 CancellationLogin();
                 break;
+            case R.id.clearpdf:
+                //实现预览pdf的清理
+                delFolder ( Environment.getExternalStorageDirectory ().getAbsolutePath () );
+                Toast.makeText ( getActivity ().getApplicationContext (),"清理成功",Toast.LENGTH_SHORT ).show ();
+                break;
+        }
+    }
+
+    public static boolean delAllFile(String path){
+        boolean flag=false;
+        File file=new File ( path );
+        if (!file.exists ()){
+            return flag;
+        }
+        if(!file.isDirectory ()){
+            return flag;
+        }
+        String[] tempList=file.list ();
+        File temp=null;
+        for (int i=0;i<tempList.length;i++){
+            if(path.endsWith ( File.separator )){
+                temp=new File ( path+tempList[i] );
+            }else{
+                temp=new File ( path+File.separator+tempList[i] );
+            }
+            if (temp.isFile ()){
+                temp.delete ();
+            }
+            if (temp.isDirectory ()){
+                delAllFile (path+"/"+tempList[i]);
+                delFolder(path+"/"+tempList[i]);
+                flag=true;
+            }
+        }
+        return flag;
+
+    }
+    public static void delFolder(String folderPath){
+        try {
+            delAllFile ( folderPath );
+            String filePath=folderPath;
+            filePath=filePath.toString ();
+            java.io.File myFilePath=new java.io.File(filePath);
+            myFilePath.delete ();
+        }catch (Exception e){
+            e.printStackTrace ();
         }
     }
 
