@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/linear_recently_y"
     android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants"
     >
     <RelativeLayout
         android:id="@+id/listview_item_02"
@@ -49,10 +50,12 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:orientation="horizontal">
-            <ImageView
+            <ImageButton
                 android:id="@+id/icon_fenxiang_recent"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:scaleType="centerCrop"
+                android:background="@null"
                 android:src="@mipmap/btn_share"
                 android:layout_gravity="center"/>
             <View
@@ -61,11 +64,13 @@
                 android:background="@color/colorGrey"
                 android:layout_gravity="center"
                 android:layout_marginLeft="2dp"/>
-            <ImageView
+            <ImageButton
                 android:id="@+id/imageview_collection_recent"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginLeft="2dp"
+                android:scaleType="centerCrop"
+                android:background="@null"
                 android:src="@mipmap/btn_heart_1"
                 android:layout_gravity="center" />
             <View
@@ -74,11 +79,13 @@
                 android:background="@color/colorGrey"
                 android:layout_gravity="center"
                 android:layout_marginLeft="2dp"/>
-            <ImageView
+            <ImageButton
                 android:id="@+id/shouchang"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginLeft="2dp"
+                android:scaleType="centerCrop"
+                android:background="@null"
                 android:src="@mipmap/bg_delete"
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/space_10"/>

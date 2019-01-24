@@ -171,6 +171,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         SharedPreferences.Editor editor=sharedPreferencesLogin.edit ();
         editor.putString ( "update_state","1" );
         editor.commit ();
+        InSetFragment.UpdateStatic ();
         LoginActivity.this.finish ();
     }
 

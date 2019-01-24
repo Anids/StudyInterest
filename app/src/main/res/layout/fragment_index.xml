@@ -27,11 +27,16 @@
         android:layout_weight="1"
         android:id="@+id/linearlayout_listliew"
         android:orientation="vertical">
-        <ListView
+        <com.baoyz.widget.PullRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/lv_01">
-        </ListView>
+            android:layout_height="match_parent">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/lv_01">
+            </ListView>
+        </com.baoyz.widget.PullRefreshLayout>
     </LinearLayout>
 
 </LinearLayout>

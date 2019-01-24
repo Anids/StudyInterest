@@ -68,6 +68,8 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
     }
 
     private void InitView() {
+        IndexFragment.ans=0;
+        RecentlyBrowseFragment.ans=0;
         SetFindViewByID();
         UpdateData();
         SetOnClickListener();
@@ -170,11 +172,17 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
     }
 
     private void JumpToLoginInterface() {
-        startActivity ( new Intent ( getActivity ().getApplicationContext (), LoginActivity.class ) );
+        new Thread (  ){
+            @Override
+            public void run() {
+                super.run ();
+                startActivity ( new Intent ( getActivity ().getApplicationContext (), LoginActivity.class ) );
+            }
+        }.start ();
         UpdateData();
     }
 
-    private void UpdateData() {
+    public void UpdateData() {
         sharedPreferencesLogin=getActivity ().getSharedPreferences ( "logindata", Context.MODE_PRIVATE );
         String token = sharedPreferencesLogin.getString ( "token","" );
         String username=sharedPreferencesLogin.getString ( "username","" );
@@ -188,6 +196,7 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
             SetData ( nickname,username );
         }
     }
+
 
     private void getInsetPassWord(String password) {
         this.InsetPassWord=password;
@@ -206,5 +215,8 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
         lbelName.setText ( nickname );
         lbelUserName.setText ( username );
         lbelStatus.setText ( "已登录" );
+    }
+    public static void UpdateStatic(){
+        InSetFragment.getNewInstance ();
     }
 }

@@ -14,9 +14,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.activity.PdfviewActivity;
 import com.swust.stylezz.studyinteret.http.HttpClient;
+import com.swust.stylezz.studyinteret.ui.RecentAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,10 +35,14 @@ public class RecentlyBrowseFragment extends Fragment implements AdapterView.OnIt
     private JSONObject RBFObj;
     private ListView listView;
     private SimpleAdapter simpleAdapter;//列表
+    private ListView listView_my;
+    private JSONObject ServerData_cancel=null;
+    private List<Map<String,Object>> mList=new ArrayList<Map<String,Object>> ();
     private static volatile RecentlyBrowseFragment recentlyBrowseFragmentInstance = null;
     private String status;
     private View rootView;
     public static String Url_RBF;
+    public static int ans=0;
 
     @SuppressLint("ValidFragment")
     private RecentlyBrowseFragment(){}
@@ -60,11 +66,32 @@ public class RecentlyBrowseFragment extends Fragment implements AdapterView.OnIt
          * 1.用token获取后端的数据；
          * 2.用列表展示数据；
          * */
-        InitView();
+        PullRefreshInterface();
         return rootView;
     }
 
+    private void PullRefreshInterface() {
+        final PullRefreshLayout layout=(PullRefreshLayout)rootView.findViewById ( R.id.recent_pullrefresh );
+        layout.setOnRefreshListener ( new PullRefreshLayout.OnRefreshListener () {
+            @Override
+            public void onRefresh() {
+                layout.postDelayed ( new Runnable () {
+                    @Override
+                    public void run() {
+                        InitView ();
+                        layout.setRefreshing ( false );
+                    }
+                },3000 );
+                ans=1;
+            }
+        } );
+        if(ans==0){
+            InitView ();
+        }
+    }
+
     private void InitView() {
+        IndexFragment.ans=0;
         getToken();
         if(status.equals ( "1" )){
 
@@ -76,7 +103,104 @@ public class RecentlyBrowseFragment extends Fragment implements AdapterView.OnIt
             Toast.makeText ( getActivity ().getApplicationContext (),"登录出错，请重新登录！",Toast.LENGTH_LONG ).show ();
             return;
         }
-        RequireToClientWithData();
+        RequireToClientWithData_02();
+    }
+    private void RequireToClientWithData_02(){
+        String UrlStr="http://interestion.xyz:3000/app/getrecentlylook";
+        try {
+            RBFObj= HttpClient.sendRequestWithHttpClient ( "GET",UrlStr,null,RecentToken );
+        } catch (InterruptedException e) {
+            e.printStackTrace ();
+        }
+        try {
+            final JSONArray data=(JSONArray)RBFObj.get ( "data" );
+            mList.clear ();
+            for (int i=0;i<data.length ();i++){
+                JSONObject oj=data.getJSONObject ( i );
+                Map<String,Object>item=new HashMap<> (  );
+                item.put ( "text",(String)oj.get ( "filename" ) );
+                item.put ( "date",(String)oj.get ( "looktime" ) );
+                mList.add ( item );
+            }
+            this.listView_my=(ListView)rootView.findViewById ( R.id.lv_02 );
+            final RecentAdapter adapter=new RecentAdapter ( getActivity ().getApplicationContext (),mList );
+            listView_my.setAdapter ( adapter );
+            listView_my.setOnItemClickListener ( this );
+            adapter.setmOnItemShareDelListener ( new RecentAdapter.OnItemShareDelListener () {
+                @Override
+                public void onDeleteClick(int i) {
+                    String UrlStr="http://interestion.xyz:3000/app/deletecollect";
+                    int fileid;
+                    try {
+                        JSONObject oj=data.getJSONObject ( i );
+                        fileid=(int)oj.get ( "fileid" );
+                        UrlStr=UrlStr+"?fileid="+fileid;
+                        ServerData_cancel=HttpClient.sendRequestWithHttpClient ( "GET",UrlStr,null,RecentToken );
+                    } catch (JSONException e) {
+                        e.printStackTrace ();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace ();
+                    }
+                    String oj=null;
+                    try {
+                        oj=ServerData_cancel.get ( "status" ).toString ();
+                    } catch (JSONException e) {
+                        e.printStackTrace ();
+                    }
+                    if (oj.equals ( "SUCCESS" )){
+                        mList.remove ( i );
+                        adapter.notifyDataSetChanged ();
+                        Toast.makeText ( getActivity ().getApplicationContext (),"删除成功",Toast.LENGTH_SHORT ).show ();
+                    }else{
+                        Toast.makeText ( getActivity ().getApplicationContext (),"删除失败",Toast.LENGTH_SHORT ).show ();
+                    }
+                }
+
+                @Override
+                public void onShareClick(int i) {
+                    String Url = null;
+                    try {
+                        JSONObject oj=data.getJSONObject ( i );
+                        Url="http://interestion.xyz:3000/"+(String) oj.get ( "fileurl" );
+                    } catch (JSONException e) {
+                        e.printStackTrace ();
+                    }
+                    Intent textIntent = new Intent ( Intent.ACTION_SEND );
+                    textIntent.setType ( "text/plain" );
+                    textIntent.putExtra ( Intent.EXTRA_TEXT ,Url);
+                    startActivity ( Intent.createChooser ( textIntent,"分享" ) );
+                }
+
+                @Override
+                public void onCollectClick(int i) {
+                    String UrlStr="http://interestion.xyz:3000/app/addcollect";
+                    int fileid;
+                    try {
+                        JSONObject oj=data.getJSONObject ( i );
+                        fileid=(int)oj.get ( "fileid" );
+                        UrlStr=UrlStr+"?fileid="+fileid;
+                        ServerData_cancel=HttpClient.sendRequestWithHttpClient ( "GET",UrlStr,null,RecentToken );
+                    } catch (JSONException e) {
+                        e.printStackTrace ();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace ();
+                    }
+                    String oj=null;
+                    try {
+                        oj=ServerData_cancel.get ( "status" ).toString ();
+                    } catch (JSONException e) {
+                        e.printStackTrace ();
+                    }
+                    if (oj.equals ( "SUCCESS" )){
+                        Toast.makeText ( getActivity ().getApplicationContext (),"添加成功",Toast.LENGTH_SHORT ).show ();
+                    }else{
+                        Toast.makeText ( getActivity ().getApplicationContext (),"添加失败",Toast.LENGTH_SHORT ).show ();
+                    }
+                }
+            } );
+        } catch (JSONException e) {
+            e.printStackTrace ();
+        }
     }
 
     private void RequireToClientWithData() {

@@ -13,10 +13,10 @@ import com.swust.stylezz.studyinteret.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAdapter extends BaseAdapter {
+public class FileLibraryAdapter extends BaseAdapter {
     private Context mContext;
     private List<String> mList = new ArrayList<> ();
-    public MyAdapter(Context context,List<String>list){
+    public FileLibraryAdapter(Context context,List<String>list){
         mContext=context;
         mList=list;
     }
@@ -37,39 +37,39 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder=null;
+        FileLibraryAdapter.ViewHolder viewHolder=null;
         if(convertView==null){
-            viewHolder=new ViewHolder ();
-            convertView= LayoutInflater.from ( mContext ).inflate ( R.layout.listview_item,null );
-            viewHolder.mTextView=(TextView) convertView.findViewById ( R.id.text_itemName );
-            viewHolder.mImageButton=(ImageButton)convertView.findViewById ( R.id.icon_fenxiang );
-            viewHolder.imageButton=(ImageButton)convertView.findViewById ( R.id.shanchu );
+            viewHolder=new FileLibraryAdapter.ViewHolder ();
+            convertView= LayoutInflater.from ( mContext ).inflate ( R.layout.listview_item_file,null );
+            viewHolder.mTextView=(TextView) convertView.findViewById ( R.id.listviewtext_database );
+            viewHolder.mImageButton=(ImageButton)convertView.findViewById ( R.id.icon_fenxiang_database );
+            viewHolder.imageButton=(ImageButton)convertView.findViewById ( R.id.imageview_collection );
             convertView.setTag ( viewHolder );
         }else{
-            viewHolder=(ViewHolder)convertView.getTag ();
+            viewHolder=(FileLibraryAdapter.ViewHolder)convertView.getTag ();
         }
         viewHolder.mTextView.setText ( mList.get ( position ) );
         viewHolder.mImageButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View v) {
-                mOnItemShareDelListener.onShareClick ( position );
+                mOnItemShareColListener.onShareClick ( position );
             }
         } );
         viewHolder.imageButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View v) {
-                mOnItemShareDelListener.onDeleteClick ( position );
+                mOnItemShareColListener.onCollectClick ( position );
             }
         } );
         return convertView;
     }
-    public interface OnItemShareDelListener {
-        void onDeleteClick(int i);
+    public interface OnItemShareColListener {
+        void onCollectClick(int i);
         void onShareClick(int i);
     }
-    private OnItemShareDelListener mOnItemShareDelListener;
-    public void setmOnItemShareDelListener(OnItemShareDelListener mOnItemShareDelListener){
-        this.mOnItemShareDelListener=mOnItemShareDelListener;
+    private OnItemShareColListener mOnItemShareColListener;
+    public void setmOnItemShareColListener(OnItemShareColListener mOnItemShareColListener){
+        this.mOnItemShareColListener=mOnItemShareColListener;
     }
 
     class ViewHolder{

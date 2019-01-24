@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.swust.stylezz.studyinteret"
@@ -30,4 +32,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'com.github.xxl6097:okhttputils:2.3.8'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.baoyz.pullrefreshlayout:library:1.2.0'
 }
