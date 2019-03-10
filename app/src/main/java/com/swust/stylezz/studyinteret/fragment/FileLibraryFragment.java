@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,7 +42,7 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
     private Spinner spinnerCourses;
     private Button btn_Determine;
     private ListView listView_my;
-    private List<String> mList=new ArrayList ();
+    private List<Map<String,Object>> mList=new ArrayList<Map<String,Object>> ();
 //    private ListView listView;
 //    private SimpleAdapter simpleAdapter;//列表
     private SharedPreferences sharedPreferences;
@@ -53,6 +54,7 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
     private String FileLibraryToken;
     private JSONObject ServerData=null;
     public static String pdf_Url;
+
     //单例模式，实例化对象
     private static volatile FileLibraryFragment fileLibraryFragmentInstance = null;
     @SuppressLint("ValidFragment")
@@ -110,6 +112,7 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
         }
     }
 
+
     private void getDataAndRequireClient() {
         gradesData=(String) spinnerGrade.getSelectedItem ();
         preferencesData=(String)spinnerProfessional.getSelectedItem ();
@@ -136,13 +139,10 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
             mList.clear ();
             for (int i=0;i<data.length ();i++){
                 JSONObject oj=data.getJSONObject ( i );
-                mList.add ( (String)oj.get ( "filename" ) );
-            }
-            for (int i=0;i<data.length ();i++){
-                int ifcot;
-                JSONObject oj=data.getJSONObject ( i );
-                ifcot=(int) oj.get ( "ifcollect" );
-                mList.add ( String.valueOf ( ifcot ) );
+                Map<String,Object>item=new HashMap<> (  );
+                item.put ( "filename",(String)oj.get ( "filename" ) );
+                item.put ( "ifcollect",oj.get ( "ifcollect" ).toString () );
+                mList.add ( item );
             }
             this.listView_my=(ListView)rootView.findViewById ( R.id.lv_03 );
             final FileLibraryAdapter adapter=new FileLibraryAdapter ( getActivity ().getApplicationContext (),mList );
@@ -189,6 +189,35 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
                     textIntent.setType ( "text/plain" );
                     textIntent.putExtra ( Intent.EXTRA_TEXT ,Url);
                     startActivity ( Intent.createChooser ( textIntent,"分享" ) );
+                }
+
+                @Override
+                public void onDeleteCollectClick(int i) {
+                    String UrlStr="http://interestion.xyz:3000/app/deletecollect";
+                    int fileid;
+                    try {
+                        JSONObject oj=data.getJSONObject ( i );
+                        fileid=(int)oj.get ( "fileid" );
+                        UrlStr=UrlStr+"?fileid="+fileid;
+                        ServerData_cancel=HttpClient.sendRequestWithHttpClient ( "GET",UrlStr,null,FileLibraryToken );
+                    } catch (JSONException e) {
+                        e.printStackTrace ();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace ();
+                    }
+                    String oj=null;
+                    try {
+                        oj=ServerData_cancel.get ( "status" ).toString ();
+                    } catch (JSONException e) {
+                        e.printStackTrace ();
+                    }
+                    if (oj.equals ( "SUCCESS" )){
+                        //mList.remove ( i );
+                        adapter.notifyDataSetChanged ();
+                        Toast.makeText ( getActivity ().getApplicationContext (),"已取消收藏",Toast.LENGTH_SHORT ).show ();
+                    }else{
+                        Toast.makeText ( getActivity ().getApplicationContext (),"取消失败",Toast.LENGTH_SHORT ).show ();
+                    }
                 }
             } );
         } catch (JSONException e) {

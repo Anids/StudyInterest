@@ -1,22 +1,29 @@
 package com.swust.stylezz.studyinteret.ui;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.swust.stylezz.studyinteret.MainActivity;
 import com.swust.stylezz.studyinteret.R;
+import com.swust.stylezz.studyinteret.fragment.FileLibraryFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class FileLibraryAdapter extends BaseAdapter {
     private Context mContext;
-    private List<String> mList = new ArrayList<> ();
-    public FileLibraryAdapter(Context context,List<String>list){
+    private List<Map<String,Object>> mList = new ArrayList<Map<String,Object>> ();
+    public FileLibraryAdapter(Context context, List<Map<String, Object>> list){
         mContext=context;
         mList=list;
     }
@@ -48,11 +55,11 @@ public class FileLibraryAdapter extends BaseAdapter {
         }else{
             viewHolder=(FileLibraryAdapter.ViewHolder)convertView.getTag ();
         }
-        viewHolder.mTextView.setText ( mList.get ( position ) );
-        int sum=mList.size ()/2+position;
-        if(mList.get ( sum )=="1")
+        Map<String,Object>map=mList.get ( position );
+        viewHolder.mTextView.setText ( (String)map.get ( "filename" ) );
+        if((String)map.get ( "ifcollect" )=="1")
         {
-
+            viewHolder.imageButton.setImageDrawable ( convertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_2 ) );
         }
         viewHolder.mImageButton.setOnClickListener ( new View.OnClickListener () {
             @Override
@@ -60,10 +67,25 @@ public class FileLibraryAdapter extends BaseAdapter {
                 mOnItemShareColListener.onShareClick ( position );
             }
         } );
+        final ViewHolder finalViewHolder = viewHolder;
+        final View finalConvertView = convertView;
         viewHolder.imageButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View v) {
-                mOnItemShareColListener.onCollectClick ( position );
+                Map<String,Object>map=mList.get ( position );
+                String msc=(String)map.get ( "ifcollect" );
+                String asa=msc;
+                if(asa=="1")
+                {
+                    mOnItemShareColListener.onDeleteCollectClick ( position );
+                    finalViewHolder.imageButton.setImageDrawable ( finalConvertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_1 ) );
+                    map.put ( "ifcollect",0 );
+                }
+                else{
+                    mOnItemShareColListener.onCollectClick ( position );
+                    map.put ( "ifcollect",1 );
+                    finalViewHolder.imageButton.setImageDrawable ( finalConvertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_2 ) );
+                }
             }
         } );
         return convertView;
@@ -71,6 +93,7 @@ public class FileLibraryAdapter extends BaseAdapter {
     public interface OnItemShareColListener {
         void onCollectClick(int i);
         void onShareClick(int i);
+        void onDeleteCollectClick(int i);
     }
     private OnItemShareColListener mOnItemShareColListener;
     public void setmOnItemShareColListener(OnItemShareColListener mOnItemShareColListener){
@@ -82,4 +105,5 @@ public class FileLibraryAdapter extends BaseAdapter {
         ImageButton mImageButton;
         ImageButton imageButton;
     }
+
 }
