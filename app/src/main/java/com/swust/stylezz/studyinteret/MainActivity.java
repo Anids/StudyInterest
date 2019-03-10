@@ -1,6 +1,7 @@
 package com.swust.stylezz.studyinteret;
 
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -15,6 +16,7 @@ import com.swust.stylezz.studyinteret.fragment.IndexFragment;
 import com.swust.stylezz.studyinteret.fragment.RecentlyBrowseFragment;
 import com.swust.stylezz.studyinteret.ui.ViewPagerAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

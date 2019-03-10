@@ -138,6 +138,12 @@ public class FileLibraryFragment extends Fragment implements View.OnClickListene
                 JSONObject oj=data.getJSONObject ( i );
                 mList.add ( (String)oj.get ( "filename" ) );
             }
+            for (int i=0;i<data.length ();i++){
+                int ifcot;
+                JSONObject oj=data.getJSONObject ( i );
+                ifcot=(int) oj.get ( "ifcollect" );
+                mList.add ( String.valueOf ( ifcot ) );
+            }
             this.listView_my=(ListView)rootView.findViewById ( R.id.lv_03 );
             final FileLibraryAdapter adapter=new FileLibraryAdapter ( getActivity ().getApplicationContext (),mList );
             listView_my.setAdapter ( adapter );

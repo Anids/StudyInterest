@@ -49,6 +49,11 @@ public class FileLibraryAdapter extends BaseAdapter {
             viewHolder=(FileLibraryAdapter.ViewHolder)convertView.getTag ();
         }
         viewHolder.mTextView.setText ( mList.get ( position ) );
+        int sum=mList.size ()/2+position;
+        if(mList.get ( sum )=="1")
+        {
+
+        }
         viewHolder.mImageButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View v) {
