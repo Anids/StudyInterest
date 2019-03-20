@@ -72,7 +72,6 @@
             android:background="#607D8B"
             tools:ignore="RtlHardcoded" />
     </RelativeLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -80,24 +79,24 @@
         android:layout_marginRight="32dp"
         android:layout_marginTop="10dp">
         <ImageView
-            android:id="@+id/img_account"
+            android:id="@+id/img_phone"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="10dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_loginuser"
+            android:src="@mipmap/ic_phone"
             tools:ignore="ContentDescription,RtlHardcoded" />
         <EditText
-            android:id="@+id/et_accountnext"
+            android:id="@+id/et_phone"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
-            android:layout_toRightOf="@+id/img_account"
+            android:layout_toRightOf="@+id/img_phone"
             android:background="@null"
-            android:hint="请输入账号"
+            android:hint="请输入手机号码"
             android:maxLines="1"
             android:textColor="@android:color/black"
             android:textColorHint="@android:color/darker_gray"
@@ -107,11 +106,11 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/img_account"
+            android:layout_toRightOf="@+id/img_phone"
             android:background="#607D8B"
             tools:ignore="RtlHardcoded" />
-    </RelativeLayout>
 
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -195,52 +194,13 @@
         android:layout_height="50dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginTop="10dp">
-        <ImageView
-            android:id="@+id/img_phone"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="10dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_phone"
-            tools:ignore="ContentDescription,RtlHardcoded" />
-        <EditText
-            android:id="@+id/et_phone"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@+id/img_phone"
-            android:background="@null"
-            android:hint="请输入手机号码"
-            android:maxLines="1"
-            android:textColor="@android:color/black"
-            android:textColorHint="@android:color/darker_gray"
-            android:textSize="14dp"
-            tools:ignore="HardcodedText,RtlHardcoded,SpUsage,TextFields" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/img_phone"
-            android:background="#607D8B"
-            tools:ignore="RtlHardcoded" />
-
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
         <EditText
             android:id="@+id/ed_yanzhengma"
             android:layout_width="120dp"
             android:layout_height="50dp"
             android:layout_marginLeft="37dp"
-            android:text="验证码"
+            android:hint="验证码"
             android:textAlignment="center"
             android:textColor="@android:color/darker_gray"
             android:textSize="14dp"
@@ -258,7 +218,6 @@
             tools:ignore="HardcodedText,SpUsage"/>
 
     </RelativeLayout>
-
     <Button
         android:id="@+id/btn_regist"
         android:layout_width="match_parent"

@@ -45,8 +45,6 @@ public class RecentAdapter extends BaseAdapter {
             viewHolder.mTextView=(TextView) convertView.findViewById ( R.id.listviewtext_recent );
             viewHolder.textView=(TextView)convertView.findViewById ( R.id.listview_date ) ;
             viewHolder.mImageButton=(ImageButton)convertView.findViewById ( R.id.icon_fenxiang_recent );
-            viewHolder.imageButton=(ImageButton)convertView.findViewById ( R.id.imageview_collection_recent );
-            viewHolder.imageButton_01=(ImageButton)convertView.findViewById ( R.id.shouchang ) ;
             convertView.setTag ( viewHolder );
         }else{
             viewHolder=(RecentAdapter.ViewHolder)convertView.getTag ();
@@ -60,24 +58,10 @@ public class RecentAdapter extends BaseAdapter {
                 mOnItemShareDelListener.onShareClick ( position );
             }
         } );
-        viewHolder.imageButton.setOnClickListener ( new View.OnClickListener () {
-            @Override
-            public void onClick(View v) {
-                mOnItemShareDelListener.onCollectClick ( position );
-            }
-        } );
-        viewHolder.imageButton_01.setOnClickListener ( new View.OnClickListener () {
-            @Override
-            public void onClick(View v) {
-                mOnItemShareDelListener.onDeleteClick ( position );
-            }
-        } );
         return convertView;
     }
     public interface OnItemShareDelListener {
-        void onDeleteClick(int i);
         void onShareClick(int i);
-        void onCollectClick(int i);
     }
     private OnItemShareDelListener mOnItemShareDelListener;
     public void setmOnItemShareDelListener(OnItemShareDelListener mOnItemShareDelListener){
@@ -88,7 +72,5 @@ public class RecentAdapter extends BaseAdapter {
         TextView mTextView;
         TextView textView;
         ImageButton mImageButton;
-        ImageButton imageButton;
-        ImageButton imageButton_01;
     }
 }

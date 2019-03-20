@@ -60,6 +60,8 @@ public class FileLibraryAdapter extends BaseAdapter {
         if((String)map.get ( "ifcollect" )=="1")
         {
             viewHolder.imageButton.setImageDrawable ( convertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_2 ) );
+        }else{
+            viewHolder.imageButton.setImageDrawable ( convertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_1 ) );
         }
         viewHolder.mImageButton.setOnClickListener ( new View.OnClickListener () {
             @Override
@@ -67,24 +69,25 @@ public class FileLibraryAdapter extends BaseAdapter {
                 mOnItemShareColListener.onShareClick ( position );
             }
         } );
-        final ViewHolder finalViewHolder = viewHolder;
-        final View finalConvertView = convertView;
+        //final ViewHolder finalViewHolder = viewHolder;
+        //final View finalConvertView = convertView;
         viewHolder.imageButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View v) {
                 Map<String,Object>map=mList.get ( position );
                 String msc=(String)map.get ( "ifcollect" );
-                String asa=msc;
-                if(asa=="1")
+                if(msc=="1")
                 {
                     mOnItemShareColListener.onDeleteCollectClick ( position );
-                    finalViewHolder.imageButton.setImageDrawable ( finalConvertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_1 ) );
-                    map.put ( "ifcollect",0 );
+                    //finalViewHolder.imageButton.setImageDrawable ( finalConvertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_1 ) );
+                    map.put ( "ifcollect","0" );
+                    FileLibraryFragment.getNewInstance ();
                 }
                 else{
                     mOnItemShareColListener.onCollectClick ( position );
-                    map.put ( "ifcollect",1 );
-                    finalViewHolder.imageButton.setImageDrawable ( finalConvertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_2 ) );
+                    map.put ( "ifcollect","1" );
+                    FileLibraryFragment.getNewInstance ();
+                    //finalViewHolder.imageButton.setImageDrawable ( finalConvertView.getContext ().getResources ().getDrawable ( R.mipmap.btn_heart_2 ) );
                 }
             }
         } );

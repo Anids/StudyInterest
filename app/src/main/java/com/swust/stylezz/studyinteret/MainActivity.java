@@ -1,9 +1,6 @@
 package com.swust.stylezz.studyinteret;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -17,12 +14,14 @@ import com.swust.stylezz.studyinteret.fragment.InSetFragment;
 import com.swust.stylezz.studyinteret.fragment.IndexFragment;
 import com.swust.stylezz.studyinteret.fragment.RecentlyBrowseFragment;
 import com.swust.stylezz.studyinteret.ui.ViewPagerAdapter;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity  implements BottomNavigationBar.OnTabSelectedListener, ViewPager.OnPageChangeListener {
 
     //BottomNavigationBar实现底部导航栏切换
     private BottomNavigationBar bottomNavigationBar;
@@ -31,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private List<Fragment> fragments;
     int lastSelectedPosition=0;
     private SharedPreferences sharedPreferencesLogin;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
@@ -41,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         ViewPagerInit();
     }
 
+
     private void InitStatus() {
         sharedPreferencesLogin=getSharedPreferences ( "logindata",MODE_PRIVATE );
         SharedPreferences.Editor editor=sharedPreferencesLogin.edit ();
@@ -49,10 +48,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     }
 
     private void ViewPagerInit() {
+        UMConfigure.setLogEnabled(true);
+        UMConfigure.setEncryptEnabled(true);
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         viewPager = (ViewPager) findViewById(R.id.root_viewpager);
 
         fragments = new ArrayList<Fragment> ();
-
         fragments.add ( IndexFragment.getNewInstance () );
         fragments.add ( FileLibraryFragment.getNewInstance () );
         fragments.add ( RecentlyBrowseFragment.getNewInstance () );
@@ -119,5 +120,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+    // Activity页面onResume函数重载
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this); // 不能遗漏
+
+    }
+
+    // Activity页面onResume函数重载
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this); // 不能遗漏
     }
 }

@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
+        config {
+        }
+        release {
+            keyAlias 'studyinterest_key'
+            keyPassword 'zhang1996zhi'
+            storeFile file('D:/StudyInterest.jks')
+            storePassword 'zhang1996zhi'
+        }
     }
     compileSdkVersion 27
     defaultConfig {
@@ -16,7 +24,19 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+apply plugin: 'com.mob.sdk'
+
+MobSDK {
+    appKey "2a64e6cf5b276"
+    appSecret "8705f4111c912e27f7f7f576c1f63bf9"
+    SMSSDK {
     }
 }
 
@@ -33,4 +53,8 @@ dependencies {
     implementation 'com.github.xxl6097:okhttputils:2.3.8'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    implementation 'com.umeng.umsdk:analytics:7.5.4'
+    implementation 'com.umeng.umsdk:common:1.5.4'
+    implementation 'com.umeng.umsdk:utdid:1.1.5.3'
+    implementation 'com.umeng.umsdk:push:5.0.2'
 }

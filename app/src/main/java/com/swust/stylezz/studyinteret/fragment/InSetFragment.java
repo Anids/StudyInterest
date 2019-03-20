@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.swust.stylezz.studyinteret.MainActivity;
 import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.activity.LoginActivity;
 import com.swust.stylezz.studyinteret.activity.UpdatePwdActivity;
@@ -32,6 +33,8 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
     private String InsetUserName;
     private String InsetPassWord;
     private String InsetToken;
+    private String _nickname=null;
+    private String _username=null;
 
     private static volatile InSetFragment inSetFragmentInstance = null;
     @SuppressLint("ValidFragment")
@@ -55,7 +58,13 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate ( R.layout.fragment_inset, container, false );
+        if (rootView==null){
+            rootView = inflater.inflate ( R.layout.fragment_inset, container, false );
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
         //Toast.makeText ( getActivity ().getApplicationContext (),"设置",Toast.LENGTH_LONG ).show ();
         /**
          * 1.头像框登录；
@@ -99,6 +108,8 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
             case R.id.myPhoto:
                 //实现登录界面的跳转或历史登录；
                 JumpToLoginInterface();
+                //修改图像
+                changeHead();
                 Toast.makeText ( getActivity ().getApplicationContext (),"登录成功",Toast.LENGTH_SHORT ).show ();
                 break;
             case R.id.changePassWord:
@@ -111,10 +122,16 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.clearpdf:
                 //实现预览pdf的清理
-                delFolder ( Environment.getExternalStorageDirectory ().getAbsolutePath () );
+                //delFolder ( Environment.getExternalStorageDirectory ().getAbsolutePath () );
                 Toast.makeText ( getActivity ().getApplicationContext (),"清理成功",Toast.LENGTH_SHORT ).show ();
                 break;
         }
+    }
+
+    private void changeHead() {
+        imageButtonHead.setImageDrawable ( getResources ().getDrawable ( R.mipmap.btn_head_2 ) );
+        UpdateData();
+        SetData ( _nickname,_username );
     }
 
     public static boolean delAllFile(String path){
@@ -179,7 +196,6 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
                 startActivity ( new Intent ( getActivity ().getApplicationContext (), LoginActivity.class ) );
             }
         }.start ();
-        UpdateData();
     }
 
     public void UpdateData() {
@@ -192,7 +208,10 @@ public class InSetFragment extends Fragment implements View.OnClickListener {
         getInsetToken(token);
         getInsetUserName(username);
         getInsetPassWord(password);
+        _nickname=nickname;
+        _username=username;
         if (status.equals ( "1" )){
+            imageButtonHead.setImageDrawable ( getResources ().getDrawable ( R.mipmap.btn_head_2 ) );
             SetData ( nickname,username );
         }
     }

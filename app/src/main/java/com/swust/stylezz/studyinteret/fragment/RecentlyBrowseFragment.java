@@ -15,6 +15,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.swust.stylezz.studyinteret.MainActivity;
 import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.activity.PdfviewActivity;
 import com.swust.stylezz.studyinteret.http.HttpClient;
@@ -60,7 +61,13 @@ public class RecentlyBrowseFragment extends Fragment implements AdapterView.OnIt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate( R.layout.fragment_recentlybrowse, container, false);
+        if (rootView==null){
+            rootView = inflater.inflate( R.layout.fragment_recentlybrowse, container, false);
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
         //Toast.makeText ( getActivity ().getApplicationContext (),"痕迹",Toast.LENGTH_LONG ).show ();
         /**
          * 1.用token获取后端的数据；
@@ -128,40 +135,11 @@ public class RecentlyBrowseFragment extends Fragment implements AdapterView.OnIt
             listView_my.setOnItemClickListener ( this );
             adapter.setmOnItemShareDelListener ( new RecentAdapter.OnItemShareDelListener () {
                 @Override
-                public void onDeleteClick(int i) {
-                    String UrlStr="http://interestion.xyz:3000/app/deletecollect";
-                    int fileid;
-                    try {
-                        JSONObject oj=data.getJSONObject ( i );
-                        fileid=(int)oj.get ( "fileid" );
-                        UrlStr=UrlStr+"?fileid="+fileid;
-                        ServerData_cancel=HttpClient.sendRequestWithHttpClient ( "GET",UrlStr,null,RecentToken );
-                    } catch (JSONException e) {
-                        e.printStackTrace ();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace ();
-                    }
-                    String oj=null;
-                    try {
-                        oj=ServerData_cancel.get ( "status" ).toString ();
-                    } catch (JSONException e) {
-                        e.printStackTrace ();
-                    }
-                    if (oj.equals ( "SUCCESS" )){
-                        mList.remove ( i );
-                        adapter.notifyDataSetChanged ();
-                        Toast.makeText ( getActivity ().getApplicationContext (),"删除成功",Toast.LENGTH_SHORT ).show ();
-                    }else{
-                        Toast.makeText ( getActivity ().getApplicationContext (),"删除失败",Toast.LENGTH_SHORT ).show ();
-                    }
-                }
-
-                @Override
                 public void onShareClick(int i) {
                     String Url = null;
                     try {
                         JSONObject oj=data.getJSONObject ( i );
-                        Url="http://interestion.xyz:3000/"+(String) oj.get ( "fileurl" );
+                        Url="http://interestion.xyz:3000"+(String) oj.get ( "fileurl" );
                     } catch (JSONException e) {
                         e.printStackTrace ();
                     }
@@ -169,33 +147,6 @@ public class RecentlyBrowseFragment extends Fragment implements AdapterView.OnIt
                     textIntent.setType ( "text/plain" );
                     textIntent.putExtra ( Intent.EXTRA_TEXT ,Url);
                     startActivity ( Intent.createChooser ( textIntent,"分享" ) );
-                }
-
-                @Override
-                public void onCollectClick(int i) {
-                    String UrlStr="http://interestion.xyz:3000/app/addcollect";
-                    int fileid;
-                    try {
-                        JSONObject oj=data.getJSONObject ( i );
-                        fileid=(int)oj.get ( "fileid" );
-                        UrlStr=UrlStr+"?fileid="+fileid;
-                        ServerData_cancel=HttpClient.sendRequestWithHttpClient ( "GET",UrlStr,null,RecentToken );
-                    } catch (JSONException e) {
-                        e.printStackTrace ();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace ();
-                    }
-                    String oj=null;
-                    try {
-                        oj=ServerData_cancel.get ( "status" ).toString ();
-                    } catch (JSONException e) {
-                        e.printStackTrace ();
-                    }
-                    if (oj.equals ( "SUCCESS" )){
-                        Toast.makeText ( getActivity ().getApplicationContext (),"添加成功",Toast.LENGTH_SHORT ).show ();
-                    }else{
-                        Toast.makeText ( getActivity ().getApplicationContext (),"添加失败",Toast.LENGTH_SHORT ).show ();
-                    }
                 }
             } );
         } catch (JSONException e) {

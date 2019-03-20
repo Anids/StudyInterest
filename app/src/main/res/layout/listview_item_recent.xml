@@ -57,38 +57,40 @@
                 android:scaleType="centerCrop"
                 android:background="@null"
                 android:src="@mipmap/btn_share"
-                android:layout_gravity="center"/>
-            <View
-                android:layout_width="1dp"
-                android:layout_height="24dp"
-                android:background="@color/colorGrey"
-                android:layout_gravity="center"
-                android:layout_marginLeft="2dp"/>
-            <ImageButton
-                android:id="@+id/imageview_collection_recent"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="2dp"
-                android:scaleType="centerCrop"
-                android:background="@null"
-                android:src="@mipmap/btn_heart_1"
-                android:layout_gravity="center" />
-            <View
-                android:layout_width="1dp"
-                android:layout_height="24dp"
-                android:background="@color/colorGrey"
-                android:layout_gravity="center"
-                android:layout_marginLeft="2dp"/>
-            <ImageButton
-                android:id="@+id/shouchang"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="2dp"
-                android:scaleType="centerCrop"
-                android:background="@null"
-                android:src="@mipmap/bg_delete"
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/space_10"/>
+            <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="24dp"-->
+                <!--android:background="@color/colorGrey"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_marginLeft="2dp"/>-->
+            <!--<ImageButton-->
+                <!--android:id="@+id/imageview_collection_recent"-->
+                <!--android:layout_width="24dp"-->
+                <!--android:layout_height="24dp"-->
+                <!--android:layout_marginLeft="2dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:background="@null"-->
+                <!--android:src="@mipmap/btn_heart_1"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_marginRight="@dimen/space_10"/>-->
+            <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="24dp"-->
+                <!--android:background="@color/colorGrey"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_marginLeft="2dp"/>-->
+            <!--<ImageButton-->
+                <!--android:id="@+id/shouchang"-->
+                <!--android:layout_width="24dp"-->
+                <!--android:layout_height="24dp"-->
+                <!--android:layout_marginLeft="2dp"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:background="@null"-->
+                <!--android:src="@mipmap/bg_delete"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_marginRight="@dimen/space_10"/>-->
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

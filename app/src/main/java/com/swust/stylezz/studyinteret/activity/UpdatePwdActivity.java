@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.http.HttpClient;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -186,5 +187,19 @@ public class UpdatePwdActivity extends AppCompatActivity implements View.OnClick
 
     private void ReturnToInset() {
         UpdatePwdActivity.this.finish ();
+    }
+    // Activity页面onResume函数重载
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this); // 不能遗漏
+
+    }
+
+    // Activity页面onResume函数重载
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this); // 不能遗漏
     }
 }

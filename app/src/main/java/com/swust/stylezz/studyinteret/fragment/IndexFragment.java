@@ -64,8 +64,13 @@ public class IndexFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        rootView = inflater.inflate ( R.layout.fragment_index, container, false );
+        if (rootView==null){
+            rootView = inflater.inflate ( R.layout.fragment_index, container, false );
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
         //Toast.makeText ( getActivity ().getApplicationContext (),"首页",Toast.LENGTH_LONG ).show ();
         /**
          * 1.显示出收藏列表；
@@ -86,7 +91,7 @@ public class IndexFragment extends Fragment implements AdapterView.OnItemClickLi
                         InitView ();
                         layout.setRefreshing ( false );
                     }
-                },3000 );
+                },600 );
                 ans=1;
             }
         } );
@@ -219,17 +224,43 @@ public class IndexFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String UrlPDF="http://interestion.xyz:3000";
+        int fileid = 0;
         try {
             JSONArray data=(JSONArray)serverData.get ( "data" );
             JSONObject oj=data.getJSONObject ( position );
             UrlPDF=UrlPDF+oj.get ( "fileurl" );
+            fileid=(int)oj.get ( "fileid" );
         } catch (JSONException e) {
             e.printStackTrace ();
         }
         this.Url_index=UrlPDF;
         PdfviewActivity.ans=1;
+        RequireToClient (fileid);
+        //请求保存最近浏览接口
         //Toast.makeText ( getActivity ().getApplicationContext (),UrlPDF,Toast.LENGTH_LONG ).show ();
         startActivity ( new Intent ( getActivity ().getApplicationContext (), PdfviewActivity.class ) );
+    }
+
+    private void RequireToClient(int fileid){
+        String url="http://interestion.xyz:3000/app/setrecentlylook"+"?fileid="+fileid;
+        JSONObject RBFObj = null;
+        try {
+            RBFObj= HttpClient.sendRequestWithHttpClient ( "GET",url,null,IndexToken );
+        } catch (InterruptedException e) {
+            e.printStackTrace ();
+        }
+        String status=null;
+        try {
+            status= RBFObj.get ( "status" ).toString ();
+        } catch (JSONException e) {
+            e.printStackTrace ();
+        }
+        if(status.equals ( "SUCCESS" )){
+
+        }else{
+
+        }
+
     }
 
 }

@@ -89,7 +89,8 @@ public class HttpClient {
                         out.flush();
                         out.close();
                         // 读取响应
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        InputStreamReader isr=new InputStreamReader ( connection.getInputStream (),"UTF-8" );
+                        BufferedReader reader = new BufferedReader(isr);
                         String lines;
                         StringBuffer sb = new StringBuffer("");
                         while ((lines = reader.readLine()) != null) {

@@ -14,10 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.swust.stylezz.studyinteret.MD5Utils;
 import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.fragment.InSetFragment;
 import com.swust.stylezz.studyinteret.fragment.IndexFragment;
 import com.swust.stylezz.studyinteret.http.HttpClient;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -204,10 +206,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             state=0;
             return;
         }
-        String accRegex = "[0-9]{10}";//账号10位数字组成
+        String accRegex = "[0-9]{11}";//账号11位数字组成
         String pasRegex = "[0-9a-zA-Z]{6,18}";//密码6-10位数字或字母组成
         if(!getUsername ().matches ( accRegex )){
-            Toast.makeText ( LoginActivity.this,"登录账号格式为10位数字，请重新输入！",Toast.LENGTH_LONG ).show ();
+            Toast.makeText ( LoginActivity.this,"登录账号格式为11位数字，请重新输入！",Toast.LENGTH_LONG ).show ();
             state=0;
             return;
         }
@@ -229,7 +231,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         JSONObject obj = new JSONObject (  );
         try {
             obj.put ( "username",UsernameHash );
-            obj.put ( "password",PasswordHash );
+            obj.put ( "password", MD5Utils.md5Password ( PasswordHash ));
         } catch (JSONException e) {
             e.printStackTrace ();
         }
@@ -314,5 +316,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GetPassWordStr.setSelection(GetPassWordStr.getText().toString().length());
             is_show = !is_show;
         }
+    }
+    // Activity页面onResume函数重载
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this); // 不能遗漏
+
+    }
+
+    // Activity页面onResume函数重载
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this); // 不能遗漏
     }
 }

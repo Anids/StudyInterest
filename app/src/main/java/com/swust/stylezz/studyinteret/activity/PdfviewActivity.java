@@ -14,6 +14,7 @@ import com.swust.stylezz.studyinteret.R;
 import com.swust.stylezz.studyinteret.fragment.FileLibraryFragment;
 import com.swust.stylezz.studyinteret.fragment.IndexFragment;
 import com.swust.stylezz.studyinteret.fragment.RecentlyBrowseFragment;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 
@@ -116,5 +117,19 @@ public class PdfviewActivity extends AppCompatActivity implements View.OnClickLi
             }.start ();
 
         }
+    }
+    // Activity页面onResume函数重载
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this); // 不能遗漏
+
+    }
+
+    // Activity页面onResume函数重载
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this); // 不能遗漏
     }
 }
